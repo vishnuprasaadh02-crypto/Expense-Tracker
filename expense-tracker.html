@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger — Expense Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EFEDE6;
+    --paper-2: #E7E3D8;
+    --ink: #23271F;
+    --ink-soft: #6B6656;
+    --line: #C9C2B2;
+    --accent: #2F5D50;
+    --accent-2: #E5EBE4;
+    --danger: #8C3B2E;
+    --danger-2: #F3E4DF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1B1C17;
+      --paper-2: #24261E;
+      --ink: #EDEAE0;
+      --ink-soft: #A6A091;
+      --line: #3A3B31;
+      --accent: #7FBDA8;
+      --accent-2: #23332C;
+      --danger: #E08A78;
+      --danger-2: #382422;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1B1C17;
+    --paper-2: #24261E;
+    --ink: #EDEAE0;
+    --ink-soft: #A6A091;
+    --line: #3A3B31;
+    --accent: #7FBDA8;
+    --accent-2: #23332C;
+    --danger: #E08A78;
+    --danger-2: #382422;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  header { margin-bottom: 1.75rem; }
+  .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    margin: 0 0 0.35rem;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(28px, 6vw, 38px);
+    margin: 0 0 0.25rem;
+    line-height: 1.05;
+  }
+  .sub { color: var(--ink-soft); font-size: 14px; margin: 0; max-width: 46ch; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .stat { background: var(--paper-2); padding: 0.9rem 0.85rem; min-width: 0; }
+  .stat-label { font-size: 11px; color: var(--ink-soft); margin: 0 0 0.3rem; text-transform: lowercase; }
+  .stat-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(15px, 4vw, 20px);
+    font-weight: 500;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  form {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 0.9rem;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .field { margin-bottom: 0.75rem; }
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 0.3rem;
+  }
+  input, select, textarea {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    padding: 0.55rem 0.6rem;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-2);
+  }
+  textarea { resize: vertical; min-height: 44px; }
+  .err { color: var(--danger); font-size: 12px; margin-top: 0.3rem; display: none; }
+  .err.show { display: block; }
+
+  .form-actions { display: flex; gap: 0.6rem; margin-top: 0.4rem; }
+  button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  button.ghost { background: transparent; }
+  button:active { transform: scale(0.98); }
+
+  .toolbar {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+  }
+  .toolbar input[type="search"] { flex: 1; min-width: 140px; }
+  .toolbar select { width: auto; }
+
+  .rows { border-top: 1px solid var(--line); }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.5rem;
+    align-items: start;
+    padding: 0.75rem 0.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .row-main { min-width: 0; }
+  .row-title { font-size: 14px; font-weight: 500; margin: 0 0 0.2rem; word-break: break-word; }
+  .row-meta { font-size: 12px; color: var(--ink-soft); display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: var(--accent-2);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .row-notes { font-size: 12px; color: var(--ink-soft); margin: 0.3rem 0 0; font-style: italic; }
+  .row-amount {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    align-self: center;
+  }
+  .row-actions { display: flex; gap: 0.35rem; align-self: center; }
+  .icon-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 12px;
+    line-height: 1;
+  }
+  .icon-btn.danger { color: var(--danger); }
+
+  .empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .empty .big { font-family: 'Fraunces', serif; font-size: 18px; color: var(--ink); margin-bottom: 0.3rem; }
+
+  footer {
+    margin-top: 2rem;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 1fr; }
+    .row-amount { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="kicker">expense tracker</p>
+    <h1>Ledger</h1>
+    <p class="sub">Log what you spend, see where it goes. Everything here stays on this device.</p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <form id="expense-form">
+    <p class="form-title" id="form-title">Add an expense</p>
+    <div class="field">
+      <label for="f-title">Title</label>
+      <input id="f-title" type="text" placeholder="Groceries">
+      <p class="err" id="err-title">Enter a title.</p>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label for="f-amount">Amount</label>
+        <input id="f-amount" type="number" step="0.01" placeholder="0.00">
+        <p class="err" id="err-amount">Enter an amount greater than 0.</p>
+      </div>
+      <div class="field">
+        <label for="f-date">Date</label>
+        <input id="f-date" type="date">
+        <p class="err" id="err-date">Pick a date.</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label for="f-category">Category</label>
+        <select id="f-category">
+          <option>Food</option>
+          <option>Travel</option>
+          <option>Rent</option>
+          <option>Utilities</option>
+          <option>Education</option>
+          <option>Shopping</option>
+          <option>Entertainment</option>
+          <option>Health</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-payment">Payment method</label>
+        <select id="f-payment">
+          <option>Cash</option>
+          <option>UPI</option>
+          <option>Card</option>
+          <option>Net Banking</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-notes">Notes (optional)</label>
+      <textarea id="f-notes" placeholder="Anything worth remembering about this one"></textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="primary" id="submit-btn">Add expense</button>
+      <button type="button" class="ghost" id="cancel-edit" style="display:none;">Cancel</button>
+    </div>
+  </form>
+
+  <div class="toolbar">
+    <input type="search" id="q-search" placeholder="Search title or notes">
+    <select id="q-category">
+      <option value="">All categories</option>
+      <option>Food</option>
+      <option>Travel</option>
+      <option>Rent</option>
+      <option>Utilities</option>
+      <option>Education</option>
+      <option>Shopping</option>
+      <option>Entertainment</option>
+      <option>Health</option>
+      <option>Other</option>
+    </select>
+    <select id="q-sort">
+      <option value="date-desc">Newest first</option>
+      <option value="date-asc">Oldest first</option>
+      <option value="amount-desc">Highest amount</option>
+      <option value="amount-asc">Lowest amount</option>
+    </select>
+  </div>
+
+  <div class="rows" id="rows"></div>
+
+  <footer>Stored locally in your browser — nothing leaves this device.</footer>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'ledger-expenses-v1';
+  var editingId = null;
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function save(list) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function fmtMoney(n) {
+    return '\u20b9' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtDate(d) {
+    var dt = new Date(d + 'T00:00:00');
+    if (isNaN(dt)) return d;
+    return dt.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  var items = load();
+
+  var els = {
+    title: document.getElementById('f-title'),
+    amount: document.getElementById('f-amount'),
+    date: document.getElementById('f-date'),
+    category: document.getElementById('f-category'),
+    payment: document.getElementById('f-payment'),
+    notes: document.getElementById('f-notes'),
+    form: document.getElementById('expense-form'),
+    formTitle: document.getElementById('form-title'),
+    submitBtn: document.getElementById('submit-btn'),
+    cancelBtn: document.getElementById('cancel-edit'),
+    errTitle: document.getElementById('err-title'),
+    errAmount: document.getElementById('err-amount'),
+    errDate: document.getElementById('err-date'),
+    rows: document.getElementById('rows'),
+    stats: document.getElementById('stats'),
+    search: document.getElementById('q-search'),
+    filterCategory: document.getElementById('q-category'),
+    sort: document.getElementById('q-sort')
+  };
+
+  var todayStr = new Date().toISOString().slice(0, 10);
+  els.date.value = todayStr;
+
+  function clearErrors() {
+    [els.errTitle, els.errAmount, els.errDate].forEach(function (e) { e.classList.remove('show'); });
+  }
+
+  function resetForm() {
+    editingId = null;
+    els.form.reset();
+    els.date.value = todayStr;
+    els.formTitle.textContent = 'Add an expense';
+    els.submitBtn.textContent = 'Add expense';
+    els.cancelBtn.style.display = 'none';
+    clearErrors();
+  }
+
+  els.form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    clearErrors();
+    var title = els.title.value.trim();
+    var amount = parseFloat(els.amount.value);
+    var date = els.date.value;
+    var valid = true;
+
+    if (!title) { els.errTitle.classList.add('show'); valid = false; }
+    if (!amount || amount <= 0 || isNaN(amount)) { els.errAmount.classList.add('show'); valid = false; }
+    if (!date) { els.errDate.classList.add('show'); valid = false; }
+    if (!valid) return;
+
+    var entry = {
+      id: editingId || uid(),
+      title: title,
+      amount: Math.round(amount * 100) / 100,
+      category: els.category.value,
+      payment: els.payment.value,
+      date: date,
+      notes: els.notes.value.trim()
+    };
+
+    if (editingId) {
+      items = items.map(function (it) { return it.id === editingId ? entry : it; });
+    } else {
+      items.push(entry);
+    }
+    save(items);
+    resetForm();
+    render();
+  });
+
+  els.cancelBtn.addEventListener('click', resetForm);
+
+  function startEdit(id) {
+    var it = items.find(function (x) { return x.id === id; });
+    if (!it) return;
+    editingId = id;
+    els.title.value = it.title;
+    els.amount.value = it.amount;
+    els.date.value = it.date;
+    els.category.value = it.category;
+    els.payment.value = it.payment;
+    els.notes.value = it.notes || '';
+    els.formTitle.textContent = 'Edit expense';
+    els.submitBtn.textContent = 'Save changes';
+    els.cancelBtn.style.display = '';
+    clearErrors();
+    els.form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function removeItem(id) {
+    items = items.filter(function (x) { return x.id !== id; });
+    save(items);
+    if (editingId === id) resetForm();
+    render();
+  }
+
+  function getFiltered() {
+    var q = els.search.value.trim().toLowerCase();
+    var cat = els.filterCategory.value;
+    var sort = els.sort.value;
+    var list = items.filter(function (it) {
+      var matchesQ = !q || it.title.toLowerCase().indexOf(q) !== -1 || (it.notes || '').toLowerCase().indexOf(q) !== -1;
+      var matchesCat = !cat || it.category === cat;
+      return matchesQ && matchesCat;
+    });
+    list.sort(function (a, b) {
+      if (sort === 'date-asc') return a.date.localeCompare(b.date);
+      if (sort === 'amount-desc') return b.amount - a.amount;
+      if (sort === 'amount-asc') return a.amount - b.amount;
+      return b.date.localeCompare(a.date);
+    });
+    return list;
+  }
+
+  function renderStats() {
+    var total = items.reduce(function (s, it) { return s + it.amount; }, 0);
+    var count = items.length;
+    var byCat = {};
+    items.forEach(function (it) { byCat[it.category] = (byCat[it.category] || 0) + it.amount; });
+    var topCat = '\u2014';
+    var topVal = -1;
+    Object.keys(byCat).forEach(function (k) { if (byCat[k] > topVal) { topVal = byCat[k]; topCat = k; } });
+
+    els.stats.innerHTML =
+      '<div class="stat"><p class="stat-label">total spent</p><p class="stat-value">' + fmtMoney(total) + '</p></div>' +
+      '<div class="stat"><p class="stat-label">entries</p><p class="stat-value">' + count + '</p></div>' +
+      '<div class="stat"><p class="stat-label">top category</p><p class="stat-value">' + topCat + '</p></div>';
+  }
+
+  function render() {
+    renderStats();
+    var list = getFiltered();
+    if (!list.length) {
+      var msg = items.length ? 'Nothing matches those filters.' : 'No expenses yet.';
+      var sub = items.length ? 'Try a different search or category.' : 'Add your first one above.';
+      els.rows.innerHTML = '<div class="empty"><p class="big">' + msg + '</p><p>' + sub + '</p></div>';
+      return;
+    }
+    els.rows.innerHTML = list.map(function (it) {
+      return '' +
+        '<div class="row" data-id="' + it.id + '">' +
+          '<div class="row-main">' +
+            '<p class="row-title">' + escapeHtml(it.title) + '</p>' +
+            '<div class="row-meta">' +
+              '<span class="badge">' + escapeHtml(it.category) + '</span>' +
+              '<span>' + fmtDate(it.date) + '</span>' +
+              '<span>' + escapeHtml(it.payment) + '</span>' +
+            '</div>' +
+            (it.notes ? '<p class="row-notes">' + escapeHtml(it.notes) + '</p>' : '') +
+          '</div>' +
+          '<div class="row-amount">' + fmtMoney(it.amount) + '</div>' +
+          '<div class="row-actions">' +
+            '<button class="icon-btn edit-btn" data-id="' + it.id + '">Edit</button>' +
+            '<button class="icon-btn danger del-btn" data-id="' + it.id + '">Delete</button>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+
+    els.rows.querySelectorAll('.edit-btn').forEach(function (b) {
+      b.addEventListener('click', function () { startEdit(b.getAttribute('data-id')); });
+    });
+    els.rows.querySelectorAll('.del-btn').forEach(function (b) {
+      b.addEventListener('click', function () { removeItem(b.getAttribute('data-id')); });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  [els.search, els.filterCategory, els.sort].forEach(function (el) {
+    el.addEventListener('input', render);
+    el.addEventListener('change', render);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
