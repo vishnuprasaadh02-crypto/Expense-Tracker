@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Expense Tracker API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000/api" }
+  ],
+  "item": [
+    {
+      "name": "List expenses",
+      "request": { "method": "GET", "url": "{{base_url}}/expenses/" }
+    },
+    {
+      "name": "Create expense (valid)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/expenses/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Groceries\",\n  \"amount\": \"450.50\",\n  \"category\": \"FOOD\",\n  \"payment_method\": \"UPI\",\n  \"date\": \"2026-09-10\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create expense (negative amount - expect 400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/expenses/",
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Bad\",\n  \"amount\": \"-5\",\n  \"category\": \"FOOD\",\n  \"date\": \"2026-09-10\"\n}" }
+      }
+    },
+    {
+      "name": "Create expense (missing title - expect 400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/expenses/",
+        "body": { "mode": "raw", "raw": "{\n  \"amount\": \"100\",\n  \"date\": \"2026-09-10\"\n}" }
+      }
+    },
+    {
+      "name": "Retrieve one expense",
+      "request": { "method": "GET", "url": "{{base_url}}/expenses/1/" }
+    },
+    {
+      "name": "Update expense (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/expenses/1/",
+        "body": { "mode": "raw", "raw": "{\n  \"amount\": \"500.00\"\n}" }
+      }
+    },
+    {
+      "name": "Delete expense",
+      "request": { "method": "DELETE", "url": "{{base_url}}/expenses/1/" }
+    },
+    {
+      "name": "Delete non-existent id (expect 404)",
+      "request": { "method": "DELETE", "url": "{{base_url}}/expenses/9999/" }
+    },
+    {
+      "name": "Search & filter",
+      "request": { "method": "GET", "url": "{{base_url}}/expenses/?search=groceries&category=FOOD" }
+    },
+    {
+      "name": "Dashboard stats",
+      "request": { "method": "GET", "url": "{{base_url}}/expenses/stats/" }
+    }
+  ]
+}
