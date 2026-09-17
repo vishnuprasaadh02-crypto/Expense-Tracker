@@ -1,0 +1,237 @@
+.home-page {
+  --paper: #f6f4ee;
+  --paper-dim: #eeebe1;
+  --ink: #21262b;
+  --ink-soft: #565f5c;
+  --ledger-green: #1f5c4c;
+  --ledger-green-dark: #163f34;
+  --line: #d8d3c3;
+
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 3rem clamp(1.25rem, 5vw, 4rem);
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.home-eyebrow {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin: 0 0 0.35rem;
+}
+
+.home-title {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin: 0;
+}
+
+.home-cta {
+  flex-shrink: 0;
+  border: none;
+  background: var(--ledger-green);
+  color: #f3efe4;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.home-cta:hover {
+  background: var(--ledger-green-dark);
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  background: var(--ledger-green);
+  background-image: radial-gradient(circle at 90% 10%, var(--ledger-green-dark) 0%, var(--ledger-green) 60%);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  color: #f3efe4;
+  margin-bottom: 2.5rem;
+}
+
+.hero-figure {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-label {
+  color: #cfe3da;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-amount {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.hero-sub {
+  color: #cfe3da;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.hero-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+  border-left: 1px solid rgba(243, 239, 228, 0.25);
+  padding-left: 2rem;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.92rem;
+}
+
+.stat-label {
+  color: #cfe3da;
+}
+
+.stat-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.recent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.recent-header h2 {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.text-link {
+  border: none;
+  background: none;
+  color: var(--ledger-green-dark);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.recent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.recent-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.95rem;
+}
+
+.recent-title {
+  font-weight: 500;
+}
+
+.recent-category {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.recent-date {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.recent-amount {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+}
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.empty-sub {
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 680px) {
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+  .hero-stats {
+    border-left: none;
+    border-top: 1px solid rgba(243, 239, 228, 0.25);
+    padding-left: 0;
+    padding-top: 1.25rem;
+  }
+  .recent-row {
+    grid-template-columns: auto 1fr auto;
+    row-gap: 0.2rem;
+  }
+  .recent-category,
+  .recent-date {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-cta {
+    transition: none;
+  }
+}
