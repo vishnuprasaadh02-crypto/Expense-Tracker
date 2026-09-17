@@ -1,0 +1,338 @@
+/* ---- Design tokens ---- */
+.auth-page {
+  --paper: #f6f4ee;
+  --paper-dim: #eeebe1;
+  --ink: #21262b;
+  --ink-soft: #565f5c;
+  --ledger-green: #1f5c4c;
+  --ledger-green-dark: #163f34;
+  --gold: #b98b2b;
+  --rust: #a6431f;
+  --line: #d8d3c3;
+
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ---- Left: ledger showcase ---- */
+.auth-ledger {
+  background: var(--ledger-green);
+  background-image: radial-gradient(
+    circle at 15% 15%,
+    var(--ledger-green-dark) 0%,
+    var(--ledger-green) 55%
+  );
+  color: #f3efe4;
+  padding: 4rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ledger-mark {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 2.25rem;
+  width: 3.25rem;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(243, 239, 228, 0.35);
+  border-radius: 50%;
+  margin-bottom: 2.5rem;
+}
+
+.ledger-kicker {
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: #cfe3da;
+  margin: 0 0 0.75rem;
+}
+
+.ledger-headline {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  line-height: 1.15;
+  margin: 0 0 3rem;
+  max-width: 15ch;
+}
+
+.ledger-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 26rem;
+  border-top: 1px solid rgba(243, 239, 228, 0.2);
+}
+
+.ledger-lines li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(243, 239, 228, 0.2);
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.95rem;
+}
+
+.ledger-lines li span:first-child {
+  color: #cfe3da;
+  font-family: "Inter", sans-serif;
+  white-space: nowrap;
+}
+
+.ledger-lines li i {
+  flex: 1;
+  border-bottom: 1px dotted rgba(243, 239, 228, 0.35);
+  margin-bottom: 0.3rem;
+}
+
+.ledger-lines__total {
+  font-weight: 600;
+  color: #f3efe4;
+}
+
+.ledger-lines__total span:first-child {
+  color: #f3efe4;
+}
+
+/* ---- Right: form ---- */
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 25rem;
+}
+
+.auth-eyebrow {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: 0 0 0.35rem;
+}
+
+.auth-title {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 500;
+  font-size: 1.9rem;
+  margin: 0 0 1.75rem;
+}
+
+.auth-toggle {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  padding: 0.25rem;
+  margin-bottom: 1.75rem;
+  background: var(--paper-dim);
+}
+
+.auth-toggle button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.auth-toggle button.is-active {
+  background: #fff;
+  color: var(--ledger-green-dark);
+  box-shadow: 0 1px 2px rgba(33, 38, 43, 0.08);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.field input {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input:focus {
+  border-color: var(--ledger-green);
+  box-shadow: 0 0 0 3px rgba(31, 92, 76, 0.15);
+}
+
+.mobile-input {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mobile-input:focus-within {
+  border-color: var(--ledger-green);
+  box-shadow: 0 0 0 3px rgba(31, 92, 76, 0.15);
+}
+
+.mobile-prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+  font-family: "IBM Plex Mono", monospace;
+  border-right: 1px solid var(--line);
+}
+
+.mobile-input input {
+  border: none;
+  flex: 1;
+  box-shadow: none !important;
+}
+
+.otp-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.otp-box {
+  width: 3rem;
+  height: 3.25rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.link {
+  color: var(--ledger-green-dark);
+  text-decoration: none;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:disabled {
+  color: var(--ink-soft);
+  cursor: default;
+  text-decoration: none;
+}
+
+.resend {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.auth-error {
+  color: var(--rust);
+  font-size: 0.87rem;
+  margin: -0.4rem 0 1.1rem;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: var(--ledger-green);
+  color: #f3efe4;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.auth-submit:hover {
+  background: var(--ledger-green-dark);
+}
+
+.auth-submit:active {
+  transform: translateY(1px);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-top: 1.5rem;
+}
+
+.auth-footer a {
+  color: var(--ledger-green-dark);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+  .auth-ledger {
+    padding: 2.75rem 1.75rem;
+  }
+  .ledger-headline {
+    margin-bottom: 2rem;
+  }
+  .ledger-lines {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-submit,
+  .auth-toggle button {
+    transition: none;
+  }
+}
