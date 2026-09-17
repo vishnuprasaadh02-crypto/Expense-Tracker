@@ -1,0 +1,363 @@
+.neon-page {
+  --void: #05060f;
+  --void-deep: #0a0e1f;
+  --cyan: #37f2e0;
+  --magenta: #ff3ec8;
+  --violet: #8b5cf6;
+  --text: #e8ecf7;
+  --text-dim: #8b93b0;
+  --card-bg: rgba(15, 18, 36, 0.65);
+  --card-line: rgba(139, 147, 176, 0.25);
+
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 20% 0%, #14163a 0%, var(--void) 55%) fixed;
+  color: var(--text);
+  font-family: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* ---- Starfield ---- */
+.starfield {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  animation: drift 90s linear infinite;
+}
+
+.stars--small {
+  background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 120px, #fff, transparent),
+    radial-gradient(1px 1px at 160px 60px, #fff, transparent),
+    radial-gradient(1px 1px at 210px 190px, #fff, transparent),
+    radial-gradient(1px 1px at 260px 40px, #fff, transparent);
+  background-size: 280px 280px;
+  opacity: 0.55;
+}
+
+.stars--medium {
+  background-image: radial-gradient(1.5px 1.5px at 50px 80px, var(--cyan), transparent),
+    radial-gradient(1.5px 1.5px at 180px 220px, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 320px 100px, var(--magenta), transparent),
+    radial-gradient(1.5px 1.5px at 400px 260px, #fff, transparent);
+  background-size: 420px 420px;
+  opacity: 0.5;
+  animation-duration: 140s;
+  animation-direction: reverse;
+}
+
+.stars--large {
+  background-image: radial-gradient(2px 2px at 100px 150px, #fff, transparent),
+    radial-gradient(2px 2px at 300px 60px, var(--violet), transparent),
+    radial-gradient(2px 2px at 450px 300px, #fff, transparent);
+  background-size: 520px 520px;
+  opacity: 0.6;
+  animation-duration: 200s;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-500px, -500px, 0);
+  }
+}
+
+.planet {
+  position: absolute;
+  bottom: -12rem;
+  right: -8rem;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #4b3d8f 0%, #1c1740 60%, #0a0820 100%);
+  box-shadow: 0 0 8rem 2rem rgba(139, 92, 246, 0.25);
+}
+
+.orbit-ring {
+  position: absolute;
+  top: -10rem;
+  left: -10rem;
+  width: 26rem;
+  height: 26rem;
+  border-radius: 50%;
+  border: 1px solid rgba(55, 242, 224, 0.15);
+  box-shadow: 0 0 4rem rgba(55, 242, 224, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stars {
+    animation: none;
+  }
+}
+
+/* ---- Card ---- */
+.neon-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.neon-card {
+  width: 100%;
+  max-width: 24rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--card-line);
+  border-radius: 1.25rem;
+  padding: 2.5rem 2.25rem;
+  box-shadow: 0 0 0 1px rgba(55, 242, 224, 0.05), 0 0 3rem rgba(139, 92, 246, 0.15),
+    0 1.5rem 3rem rgba(0, 0, 0, 0.45);
+}
+
+.neon-mark {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--void);
+  background: linear-gradient(135deg, var(--cyan), var(--magenta));
+  box-shadow: 0 0 1.5rem rgba(55, 242, 224, 0.5);
+  margin-bottom: 1.5rem;
+}
+
+.neon-eyebrow {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.4rem;
+}
+
+.neon-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+  background: linear-gradient(90deg, var(--cyan), var(--text) 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.neon-subtitle {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0 0 1.75rem;
+}
+
+.neon-toggle {
+  display: flex;
+  border: 1px solid var(--card-line);
+  border-radius: 0.7rem;
+  padding: 0.25rem;
+  margin-bottom: 1.6rem;
+  background: rgba(5, 6, 15, 0.4);
+}
+
+.neon-toggle button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.neon-toggle button.is-active {
+  background: rgba(55, 242, 224, 0.12);
+  color: var(--cyan);
+  box-shadow: 0 0 0 1px rgba(55, 242, 224, 0.35) inset;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.field input {
+  font: inherit;
+  font-size: 0.98rem;
+  color: var(--text);
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--card-line);
+  border-radius: 0.6rem;
+  background: rgba(5, 6, 15, 0.5);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input::placeholder {
+  color: #565d78;
+}
+
+.field input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(55, 242, 224, 0.15);
+}
+
+.mobile-input {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--card-line);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background: rgba(5, 6, 15, 0.5);
+}
+
+.mobile-input:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(55, 242, 224, 0.15);
+}
+
+.mobile-prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background: rgba(139, 147, 176, 0.08);
+  color: var(--text-dim);
+  font-family: "IBM Plex Mono", monospace;
+  border-right: 1px solid var(--card-line);
+}
+
+.mobile-input input {
+  border: none;
+  flex: 1;
+  box-shadow: none !important;
+}
+
+.otp-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.otp-box {
+  width: 2.9rem;
+  height: 3.1rem;
+  text-align: center;
+  font-size: 1.25rem;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.link {
+  color: var(--cyan);
+  text-decoration: none;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:disabled {
+  color: var(--text-dim);
+  cursor: default;
+  text-decoration: none;
+}
+
+.resend {
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+}
+
+.neon-error {
+  color: var(--magenta);
+  font-size: 0.85rem;
+  margin: -0.4rem 0 1.1rem;
+}
+
+.neon-submit {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 0.65rem;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  color: var(--void);
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 0 1.5rem rgba(55, 242, 224, 0.3);
+  transition: box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.neon-submit:hover {
+  box-shadow: 0 0 2.25rem rgba(55, 242, 224, 0.5);
+}
+
+.neon-submit:active {
+  transform: translateY(1px);
+}
+
+.neon-submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+  box-shadow: none;
+}
+
+.neon-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: 1.5rem;
+}
+
+.neon-footer a {
+  color: var(--cyan);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.neon-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .neon-card {
+    padding: 2rem 1.5rem;
+  }
+}
